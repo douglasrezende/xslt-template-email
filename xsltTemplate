@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output method="html" indent="yes"/>
+<xsl:template match="/">
+<html>
+<body>
+<table border="0" bgcolor="white">
+<tr>
+       <th colspan="3"><b>ALERTA - PROJETO INTEGRAÇÃO - REQUISICOES NAO PROCESSADAS</b></th>
+</tr>
+<tr>
+     <th>DATA_REQUISICAO</th>
+     <th>ID_CLIENTE</th>
+     <th>HTTP_STATUS_CODE</th>
+</tr>
+<xsl:for-each select="/result/row">
+     <tr bgcolor="#F0F0F0">
+         <td><xsl:value-of select="DATA_REQUISICAO"/></td>
+         <td><xsl:value-of select="ID_CLIENTE"/></td>
+         <td><div align="right">
+                       <font color="red">
+                            <xsl:value-of select="HTTP_STATUS_CODE"/>
+                       </font>
+               </div>
+         </td>
+        </tr>
+</xsl:for-each>
+</table>
+<br>
+<xsl:variable name="http400" select="/result/row[HTTP_STATUS_CODE = '400']" /> -->
+<xsl:variable name="countHttp400" select="count($http400)" />
+<b>Total requisições HTTP 400:<xsl:value-of select="$countHttp400" /></b>
+</br>
+<br>
+<xsl:variable name="http500" select="/result/row[HTTP_STATUS_CODE = '500']" /> -->
+<xsl:variable name="countHttp500" select="count($http500)" />
+<b>Total requisições HTTP 500:<xsl:value-of select="$countHttp500" /></b>
+</br>
+<br>
+<b>Total requisições rejeitadas pelo SIMTR:<xsl:value-of select="count(/result/row/HTTP_STATUS_CODE)"/></b>
+</br>
+<br>
+<b>ATENÇÃO: APÓS O PERIODO DE 30 DIAS ÚTEIS ESSAS REQUISIÇÕES SERÃO EXPURGADAS!</b>
+</br>
+</body>
+</html>
+</xsl:template>
+</xsl:stylesheet>
